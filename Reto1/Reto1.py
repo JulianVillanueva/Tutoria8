@@ -39,9 +39,6 @@ def agregar_A_Listado(datos_Estudiante: dict):
     return listado_Estudiantes
 
 def validar_fecha(fecha):
-    """
-    Recuerda que esta función se explica en detalle en fechas.py. Ahí esta documentado ;)
-    """
     
     dia, mes, anio = fecha.split("/")
 
