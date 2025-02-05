@@ -9,11 +9,9 @@
     4. Opcion de 'Agregar' un nuevo estudiante, y agregarlo a un listado General
     5. Opcion de 'Leer' los estudiantes existentes en el listado General
     
-    Tarea: 
-    Agregar una funcion para sacar 'promedio' con las notas que tenga el estudiante
 """
 
-listado_Estudiantes = []
+listado_Estudiantes = [] #Listado Global
 
 # FUNCIONES --------------------------------------
 def agregar_Estudiante(documento, nombre_Estudiante, matricula, notas: list):
@@ -26,20 +24,32 @@ def agregar_Estudiante(documento, nombre_Estudiante, matricula, notas: list):
     El 'value' sera una lista[] con los datos del estudiante
     """
     estudiante.update({ documento : [nombre_Estudiante, matricula, notas]})
+    listado_Estudiantes.append(estudiante)
     return estudiante
 
-def agregar_A_Listado(datos_Estudiante: dict):
-    
+def eliminar_Estudiante(listado_Estudiantes: list, llave):
     """
-    Agrega el diccionario datos_Estudiante -> al listado general -> listado_Estudiantes
-    con la opcion 2. del menu podremos ver todos los estudiantes por consola
+    Funcion que recorre el listado de estudiantes y 
+    elimina el estudiante con la llave(documento) ingresado
     """
     
-    listado_Estudiantes.append(datos_Estudiante)
-    return listado_Estudiantes
+    mensaje_eliminar = f"Estudiante con documento {llave} eliminado"
+    mensaje_no_encontrado = f"No hay estudiantes con este documento: {llave}"
+    
+    for estudiante in listado_Estudiantes:
+        if llave in estudiante:
+            listado_Estudiantes.remove(estudiante)
+            return print(mensaje_eliminar)
+    
+    return print(mensaje_no_encontrado)
 
 def validar_fecha(fecha):
-    
+    """
+    Funcion que valida la fecha ingresada en formato (DD/MM/AAAA)
+    1. Longitud de 10 caracteres
+    2. Los valores de la fecha deben ser numéricos
+    3. Los valores de la fecha deben estar entre 1 y 31, 1 y 12 y 1900 y 2025
+    """
     dia, mes, anio = fecha.split("/")
 
     if len(fecha) != 10:
@@ -73,25 +83,40 @@ while True:
         break
     
     # OPCION 1. Agregar
-    if opcion == "1":
+    elif opcion == "1":
         
         documento = int(input("Ingrese el documento del estudiante: "))
         nombre_Estudiante = input("Ingrese el nombre del estudiante: ")
         matricula_Fecha = input("Ingrese la fecha de la matricula (DD/MM/AAAA): ")
+        if validar_fecha(matricula_Fecha) != "Fecha válida":
+            print("Fecha invalida")
+            break
         
-        nota1 = float(input("Ingrese la nota 1: "))
+        """nota1 = float(input("Ingrese la nota 1: "))
         nota2 = float(input("Ingrese la nota 2: "))
         nota3 = float(input("Ingrese la nota 3: "))
-        lista_Notas = [nota1, nota2, nota3]   
+        lista_Notas = [nota1, nota2, nota3]"""
         
-        Dict_Estudiante = agregar_Estudiante(documento, nombre_Estudiante, matricula_Fecha, lista_Notas)  
-        agregar_A_Listado(Dict_Estudiante) # Inmediatamente agregamos el estudiante creado al listado general   
+        notas = list(map(float, [input("Ingrese la nota 1: "), input("Ingrese la nota 2: "), input("Ingrese la nota 3: ")]))
+        
+        Dict_Estudiante = agregar_Estudiante(documento, nombre_Estudiante, matricula_Fecha, notas)  
         print("\nAgregado correctamente")
     
     # OPCION 2. Leer
-    if opcion == "2":
+    elif opcion == "2":
         for estudiante in listado_Estudiantes:
-            print("Estudiante: ", estudiante)
+            print("\nEstudiante:", estudiante)
+            
+    # OPCION 3. Eliminar
+    elif opcion == "3":
+        llave = int(input("Ingrese el documento del estudiante a eliminar: "))
+        eliminar_Estudiante(listado_Estudiantes, llave)
              
+    elif opcion == "4":
+        pass
+    
+    elif opcion == "5":
+        pass
+    
     else:
-        print("ERROR. Ingrese una opcion valida")
+        print("Opcion incorrecta")
